@@ -4,7 +4,10 @@ from models import Product, Customer, Category, Base
 from db import Session, engine
 from sqlalchemy import select
 
+#Create session
 session = Session()
+
+#Function that handles category and products table
 def import_products():
      with open("products.csv", 'r') as file:
             reader = csv.DictReader(file)
@@ -26,13 +29,14 @@ def import_products():
                 session.add(products)
             session.commit()
             print("Products imported")
-
+#Create and drop table
 def create_table():
      Base.metadata.create_all(bind=engine)
      print('Tables created')
 def drop_table():
      Base.metadata.drop_all(bind=engine)
 
+#Handles Customer table
 def import_customers():
      with open('customers.csv', 'r') as file:
           reader = csv.DictReader(file)
@@ -44,6 +48,7 @@ def import_customers():
           session.commit()
           print('Customer imported')
 
+#Basic query functions, that displays products and customer table
 def query_products():
      statement = select(Product).where(Product.id < 5)
      results = session.execute(statement)
