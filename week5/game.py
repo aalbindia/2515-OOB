@@ -1,9 +1,10 @@
-from question import QuestionLibrary
+from Trivia.question import QuestionLibrary
 
 class Game:
-    def __init__(self, filename="trivia.json", category=None, difficulty=None, number=None):
+    def __init__(self, filename = "trivia.json", category = None, difficulty=None, number=None):
         self.library = QuestionLibrary(filename)
         self.questions = self.library.get_questions(category=category, difficulty=difficulty, number=number)
+        print(f"Loaded {len(self.questions)} questions") #debugging output
         self.score = 0
 
     def play(self):
@@ -33,5 +34,7 @@ class Game:
 
         print(f"Game over! Your final score is: {self.score}")
 
-game = Game(category="Geography", difficulty="easy", number=2)
+game = Game(category="General Knowledge", difficulty="easy", number=3)
 game.play()
+
+        
