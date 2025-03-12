@@ -8,3 +8,8 @@
 
 >[!note] Commits will be made consistently after each stepping stone of project is completed
 
+## March 11th, 2025
+
+- Set up Flask Environment
+- Develop basic templates for example pages
+- Render templates
