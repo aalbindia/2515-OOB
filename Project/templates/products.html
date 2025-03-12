@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Products</h1>
+<div class="d-flex flex-wrap">
+    {% for product in data %}
+    <div class="m-2 p-3 border border-black text-center">
+        <h4>{{ product.name }}</h4>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

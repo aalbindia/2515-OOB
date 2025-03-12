@@ -1,0 +1,13 @@
+{% extends "customer.html" %}
+
+{% block content %}
+<h1>Customer: {{ customer.name }}</h1>
+<div class="d-flex flex-wrap">
+    <div class="m-2 p-3 border border-black text-center">
+        <ul>
+            <li>{{ customer.phone }}</li>
+            <li>{{ customer.name }}</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
