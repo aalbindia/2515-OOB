@@ -1,7 +1,7 @@
 from flask import Flask,render_template
 from pathlib import Path
 from db import db
-from models import Customer, Category, Product
+from models import Customer, Category, Product, Order, ProductOrder
 
 
 app = Flask(__name__)
@@ -50,7 +50,23 @@ def customer_detail(id):
         return render_template("customer_detail.html", customer=customer)
     else:
         return "Customer Not found" , 404
+
+@app.route("/orders")
+def orders():
+    order = db.session.execute(db.select(Order)).scalars().all()
+    if order:
+        return render_template("orders.html", orders=order)
+    else:
+        return "No Orders Found", 404
     
+@app.route("/orders/<int:ORDER_ID>")
+def order_detail(ORDER_ID):
+    order = db.session.execute(db.select(Order).where(Order.id == ORDER_ID)).scalar()
+    if order:
+        total_amount = sum(item.product.price * item.quantity for item in order.items)
+        return render_template("order_detail.html", order=order, total=total_amount)
+    else:
+        return "Order details Unknown", 404
 
 if __name__ == "__main__":
     app.run(debug=True,port=8080)
