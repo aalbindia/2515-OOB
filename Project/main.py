@@ -1,8 +1,9 @@
 import csv
+import random
 import sys
-from models import Product, Customer, Category
+from models import Product, Customer, Category, Order, ProductOrder
 from db import db
-from sqlalchemy import select
+from sqlalchemy import select, func
 from app import app
 session = db.session
 
@@ -61,6 +62,51 @@ def query_customers():
      for cus in results.scalars():
           print(f'Name: {cus.name}, Phone: {cus.phone}')
 
+def create_random_orders(num_orders=5):
+    """
+    Creates random orders with random products and quantities.
+    
+    Args:
+        num_orders (int): Number of orders to create. Defaults to 5.
+    """
+    for _ in range(num_orders):
+        # Get a random customer
+        random_customer = db.session.execute(
+            select(Customer).order_by(func.random())
+        ).scalar()
+        
+        if not random_customer:
+            print("No customers found in database")
+            return
+        
+        # Create a new order for this customer
+        new_order = Order(customer=random_customer)
+        db.session.add(new_order)
+        
+        # Get a random number of products (between 2 and 5)
+        num_products = random.randint(2, 5)
+        random_products = db.session.execute(
+            select(Product).order_by(func.random()).limit(num_products)
+        ).scalars()
+        
+        # Add products to the order with random quantities
+        for product in random_products:
+            quantity = random.randint(1, 10)  # Random quantity between 1 and 10
+            product_order = ProductOrder(
+                product=product,
+                order=new_order,
+                quantity=quantity
+            )
+            db.session.add(product_order)
+    
+    # Commit all changes
+    try:
+        db.session.commit()
+        print(f"Successfully created {num_orders} random orders")
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error creating orders: {str(e)}")
+
 if __name__ == "__main__":
     with app.app_context():
          
@@ -79,6 +125,8 @@ if __name__ == "__main__":
      elif command == "query":
           query_customers()
           query_products()
+     elif command == "random_orders":
+          create_random_orders()
      else:
           print('Invalid argument')
 

@@ -5,7 +5,8 @@
 <div class="d-flex flex-wrap">
     {% for category in data %}
     <div class="m-2 p-3 border border-black text-center">
-        <h4>{{ category.name }}</h4>
+        <a href="{{ url_for('category_detail',name=category.name) }}">{{ category.name }}</a> 
+        <!-- Since the function category_detail, requires an arg "name" we need to give url_for the param name -->
     </div>
     {% endfor %}
 </div>
